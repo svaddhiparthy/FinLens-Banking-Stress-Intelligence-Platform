@@ -83,26 +83,30 @@ def _entry_tile(area: str, icon: str, title: str, caption: str, href: str,
 
 
 def _render_architecture_window() -> None:
-    """Inline, scrollable and zoomable architecture diagram, styled as a bento tile.
+    """Inline, scrollable and zoomable architecture diagram, framed as a bento tile.
 
-    Reuses the same DOT source and svg-pan-zoom layer as the full-screen Architecture page, so
-    there is exactly one diagram definition. Scroll to zoom, drag to pan, controls to reset.
+    The chart is drawn directly rather than through ``render_architecture`` so the landing owns
+    the frame height and carries no stray caption: the title bar is overlaid into the drawing's
+    blank top band, and the zoom/pan hint rides in the same bar. Same DOT source and
+    svg-pan-zoom layer as the full-screen Architecture page, so one diagram definition.
     """
-    from streamlit_app.lib.wiki_architecture import render_architecture
+    from streamlit.components.v1 import html as _html
+
+    from streamlit_app.lib.wiki_architecture import _PANZOOM_JS, ARCHITECTURE_DOT
 
     st.markdown(
         """
-        <div class="fl-archhead">
-          <div><span class="fl-kicker">Architecture</span>
-          <span class="fl-title">The whole platform, end to end</span>
-          <span class="fl-cap">Public sources, ingestion and Bronze, dbt Silver and Gold on
-          DuckDB, the hazard model, serving surfaces, and orchestration.</span></div>
+        <div class="fl-archbar">
+          <span class="fl-kicker">Architecture</span>
+          <span class="fl-archtitle">The whole platform, end to end</span>
+          <span class="fl-archhint">Scroll to zoom &middot; drag to pan</span>
           <a class="fl-cta" href="Architecture" target="_self">Full screen &rarr;</a>
         </div>
         """,
         unsafe_allow_html=True,
     )
-    render_architecture()
+    st.graphviz_chart(ARCHITECTURE_DOT, use_container_width=True)
+    _html(_PANZOOM_JS, height=0)
 
 
 def render_landing() -> None:
@@ -192,14 +196,30 @@ _CSS = """
     "infer infer model model map  map";}
 .fl-grid-tail {grid-template-rows: 108px;
   grid-template-areas: "repo  repo  wiki  wiki  arch arch";}
-.fl-bento-tail {margin-top:0 !important;}
-/* inline architecture window: bento-styled header above the real zoomable diagram */
-.fl-archhead {max-width:1180px; margin:1.2rem auto .5rem; padding:0 .4rem; display:flex;
-  align-items:flex-end; justify-content:space-between; gap:.75rem;}
-.fl-archhead .fl-title {font-size:1.12rem;}
-.fl-archhead .fl-cap {max-width:78ch;}
-.fl-archhead a.fl-cta {white-space:nowrap; text-decoration:none !important;}
-[data-testid="stGraphVizChart"], .stGraphVizChart {max-width:1180px; margin:0 auto;}
+.fl-bento-tail {margin-top:.9rem !important;}
+/* inline architecture window: the title bar sits INSIDE the frame, over the drawing's blank
+   top band, and the frame is sized to the drawing instead of a fixed tall box. */
+.fl-archbar {position:relative; z-index:5; max-width:1180px; margin:1.15rem auto -40px;
+  padding:0 1.15rem; height:34px; display:flex; align-items:center; gap:.65rem;
+  pointer-events:none;}
+.fl-archbar .fl-kicker {flex:none;}
+.fl-archtitle {font-weight:800; color:#1f2933 !important; font-size:.98rem; line-height:1;
+  white-space:nowrap;}
+.fl-archhint {font-size:.66rem; font-weight:700; color:#a2907c !important; white-space:nowrap;
+  margin-left:.15rem;}
+.fl-archbar a.fl-cta {margin-left:auto; white-space:nowrap; text-decoration:none !important;
+  pointer-events:auto;}
+[data-testid="stGraphVizChart"], .stGraphVizChart {max-width:1180px; margin:0 auto !important;
+  height:300px; border:1px solid #e4d7c6; border-radius:16px; background:#fffaf3;
+  overflow:hidden; box-shadow:0 8px 24px rgba(15,23,42,.05);}
+[data-testid="stGraphVizChart"] > svg, .stGraphVizChart > svg {
+  width:100% !important; height:100% !important;}
+.svg-pan-zoom-control-background {fill:#fffaf3; opacity:.85;}
+.svg-pan-zoom-control-element {fill:#bf6d47;}
+/* the pan-zoom helper mounts a zero-height component iframe: do not let it add a gap */
+iframe[title="streamlit.components.v1.html"] {height:0 !important; display:block;
+  margin:0 !important;}
+[data-testid="stGraphVizChart"] + div, .stGraphVizChart + div {margin-top:0 !important;}
 .fl-tile {display:flex; flex-direction:column; background:#fffaf3; border:1px solid #e7dccb;
   border-radius:16px; padding:.75rem .85rem; overflow:hidden;
   transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;}
@@ -260,7 +280,11 @@ _CSS = """
   .fl-grid {grid-template-columns: 1fr; grid-template-rows: none; gap:14px;}
   .fl-grid-top {grid-template-areas: "hero" "dq" "ci" "infer" "model" "map";}
   .fl-grid-tail {grid-template-areas: "repo" "wiki" "arch";}
-  .fl-archhead {flex-direction:column; align-items:flex-start; gap:.4rem;}
+  .fl-archbar {margin:1rem auto .45rem; height:auto; padding:0 .2rem; flex-wrap:wrap;
+    gap:.4rem .6rem;}
+  .fl-archtitle {white-space:normal;}
+  .fl-archhint {display:none;}
+  [data-testid="stGraphVizChart"], .stGraphVizChart {height:220px;}
   .fl-img .fl-figwrap {min-height: 160px;}
   .fl-tile[style*="hero"] .fl-figwrap {min-height: 220px;}
   .fl-fact {min-height: 150px;}
