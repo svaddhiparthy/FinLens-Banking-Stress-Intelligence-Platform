@@ -350,7 +350,7 @@ def render_nav(active_page: str, mode: str) -> None:
             '<div class="hdr-name">'
             '<a class="name-link" href="https://surya.vaddhiparthy.com/" target="_blank" '
             'rel="noopener"><span class="hdr-name-main">Surya Vaddhiparthy</span></a>'
-            '<span class="hdr-name-cred">M.S. Data Science</span></div>',
+            '<span class="hdr-name-cred">Data Engineer</span></div>',
             unsafe_allow_html=True,
         )
     with bar_l:
