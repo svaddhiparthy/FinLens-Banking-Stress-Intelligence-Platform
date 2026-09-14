@@ -135,6 +135,8 @@ def render_landing() -> None:
                    "Ruff + pytest on every PR, pytest on main, nightly run, Terraform plan. "
                    "Docker images and Kubernetes manifests committed.",
                    _REPO, cta="Repository", external=True),
+    ]
+    entries = [
         _img_tile("infer", "gauge.png", "Live model inference", "Score any U.S. bank",
                   "Calibrated four-quarter distress probability, backtested on a real failure.",
                   "Early_Warning", badge="HIGH RISK", cta="Score a bank", overlay=gauge_overlay),
@@ -143,8 +145,6 @@ def render_landing() -> None:
                   "Technical_Dashboard", cta="Technical"),
         _img_tile("map", "map.png", "Geography", "Where banks fail",
                   "FDIC failures by state, 2008–2026.", "Business_Dashboard", cta="Business"),
-    ]
-    entries = [
         _entry_tile("repo", "⌥", "Source code",
                     "Airflow · dbt · GX · Docker · k8s · Terraform",
                     _REPO, external=True),
@@ -189,13 +189,14 @@ _CSS = """
 .fl-klabel {display:block; font-size:.64rem; font-weight:700; text-transform:uppercase;
   letter-spacing:.07em; color:#8a7a67 !important; margin-top:.4rem; line-height:1.25;}
 .fl-grid {display:grid; grid-template-columns: repeat(6, 1fr); gap:18px;}
-.fl-grid-top {grid-template-rows: 172px 172px 184px;
+.fl-grid-top {grid-template-rows: 172px 172px;
   grid-template-areas:
     "hero  hero  hero  hero  dq   dq"
-    "hero  hero  hero  hero  ci   ci"
-    "infer infer model model map  map";}
-.fl-grid-tail {grid-template-rows: 108px;
-  grid-template-areas: "repo  repo  wiki  wiki  arch arch";}
+    "hero  hero  hero  hero  ci   ci";}
+.fl-grid-tail {grid-template-rows: 184px 108px;
+  grid-template-areas:
+    "infer infer model model map  map"
+    "repo  repo  wiki  wiki  arch arch";}
 .fl-bento-tail {margin-top:.9rem !important;}
 /* inline architecture window: the title bar sits INSIDE the frame, over the drawing's blank
    top band, and the frame is sized to the drawing instead of a fixed tall box. */
@@ -278,8 +279,8 @@ iframe[title="streamlit.components.v1.html"] {height:0 !important; display:block
   .fl-num {font-size:1.5rem;}
   .fl-klabel {margin-top:.25rem; font-size:.6rem;}
   .fl-grid {grid-template-columns: 1fr; grid-template-rows: none; gap:14px;}
-  .fl-grid-top {grid-template-areas: "hero" "dq" "ci" "infer" "model" "map";}
-  .fl-grid-tail {grid-template-areas: "repo" "wiki" "arch";}
+  .fl-grid-top {grid-template-areas: "hero" "dq" "ci";}
+  .fl-grid-tail {grid-template-areas: "infer" "model" "map" "repo" "wiki" "arch";}
   .fl-archbar {margin:1rem auto .45rem; height:auto; padding:0 .2rem; flex-wrap:wrap;
     gap:.4rem .6rem;}
   .fl-archtitle {white-space:normal;}
