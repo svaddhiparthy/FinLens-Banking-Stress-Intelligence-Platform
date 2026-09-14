@@ -40,7 +40,9 @@ services:
       retries: 3
       start_period: 30s
     mem_limit: 2g
-    memswap_limit: 2g
+    memswap_limit: 3g
+    cpus: 1.0
+    pids_limit: 512
     env_file:
       - /opt/platform/vault/secrets/professional/finlens.env
     environment:
