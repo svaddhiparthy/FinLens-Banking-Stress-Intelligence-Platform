@@ -82,6 +82,29 @@ def _entry_tile(area: str, icon: str, title: str, caption: str, href: str,
     </a>"""
 
 
+def _render_architecture_window() -> None:
+    """Inline, scrollable and zoomable architecture diagram, styled as a bento tile.
+
+    Reuses the same DOT source and svg-pan-zoom layer as the full-screen Architecture page, so
+    there is exactly one diagram definition. Scroll to zoom, drag to pan, controls to reset.
+    """
+    from streamlit_app.lib.wiki_architecture import render_architecture
+
+    st.markdown(
+        """
+        <div class="fl-archhead">
+          <div><span class="fl-kicker">Architecture</span>
+          <span class="fl-title">The whole platform, end to end</span>
+          <span class="fl-cap">Public sources, ingestion and Bronze, dbt Silver and Gold on
+          DuckDB, the hazard model, serving surfaces, and orchestration.</span></div>
+          <a class="fl-cta" href="Architecture" target="_self">Full screen &rarr;</a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    render_architecture()
+
+
 def render_landing() -> None:
     kpis = "".join(
         f'<div class="fl-kpi"><span class="fl-num">{num}</span>'
@@ -116,24 +139,34 @@ def render_landing() -> None:
                   "Technical_Dashboard", cta="Technical"),
         _img_tile("map", "map.png", "Geography", "Where banks fail",
                   "FDIC failures by state, 2008–2026.", "Business_Dashboard", cta="Business"),
-        _entry_tile("repo", "⌥", "Source code", "Airflow · dbt · GX · Docker · k8s · Terraform",
+    ]
+    entries = [
+        _entry_tile("repo", "⌥", "Source code",
+                    "Airflow · dbt · GX · Docker · k8s · Terraform",
                     _REPO, external=True),
         _entry_tile("wiki", "❖", "FinLens-Wiki", "The full encyclopedia.", "Wiki"),
-        _entry_tile("arch", "▦", "Architecture", "Full-screen, zoomable system diagram.",
-                    "Architecture"),
+        _entry_tile("arch", "▦", "Architecture wiki", "Design decisions and rationale.",
+                    "Wiki?article=system-architecture"),
     ]
 
-    html = f"""
+    top = f"""
 <div class="fl-bento">
   <div class="fl-lede">A production-shaped batch data platform: public FDIC, FFIEC, and FRED feeds
     orchestrated through Airflow into a dbt-modeled DuckDB warehouse, quality-gated by Great
     Expectations, and served to a calibrated early-warning model and live dashboards.</div>
   <div class="fl-kpis">{kpis}</div>
-  <div class="fl-grid">{''.join(tiles)}</div>
+  <div class="fl-grid fl-grid-top">{''.join(tiles)}</div>
 </div>
 {_CSS}
 """
-    st.markdown(html, unsafe_allow_html=True)
+    tail = f"""
+<div class="fl-bento fl-bento-tail">
+  <div class="fl-grid fl-grid-tail">{''.join(entries)}</div>
+</div>
+"""
+    st.markdown(top, unsafe_allow_html=True)
+    _render_architecture_window()
+    st.markdown(tail, unsafe_allow_html=True)
 
 
 _CSS = """
@@ -151,13 +184,22 @@ _CSS = """
   letter-spacing:-.015em; font-variant-numeric: tabular-nums; line-height:1;}
 .fl-klabel {display:block; font-size:.64rem; font-weight:700; text-transform:uppercase;
   letter-spacing:.07em; color:#8a7a67 !important; margin-top:.4rem; line-height:1.25;}
-.fl-grid {display:grid; grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: 172px 172px 184px 108px; gap:18px;
+.fl-grid {display:grid; grid-template-columns: repeat(6, 1fr); gap:18px;}
+.fl-grid-top {grid-template-rows: 172px 172px 184px;
   grid-template-areas:
     "hero  hero  hero  hero  dq   dq"
     "hero  hero  hero  hero  ci   ci"
-    "infer infer model model map  map"
-    "repo  repo  wiki  wiki  arch arch";}
+    "infer infer model model map  map";}
+.fl-grid-tail {grid-template-rows: 108px;
+  grid-template-areas: "repo  repo  wiki  wiki  arch arch";}
+.fl-bento-tail {margin-top:0 !important;}
+/* inline architecture window: bento-styled header above the real zoomable diagram */
+.fl-archhead {max-width:1180px; margin:1.2rem auto .5rem; padding:0 .4rem; display:flex;
+  align-items:flex-end; justify-content:space-between; gap:.75rem;}
+.fl-archhead .fl-title {font-size:1.12rem;}
+.fl-archhead .fl-cap {max-width:78ch;}
+.fl-archhead a.fl-cta {white-space:nowrap; text-decoration:none !important;}
+[data-testid="stGraphVizChart"], .stGraphVizChart {max-width:1180px; margin:0 auto;}
 .fl-tile {display:flex; flex-direction:column; background:#fffaf3; border:1px solid #e7dccb;
   border-radius:16px; padding:.75rem .85rem; overflow:hidden;
   transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;}
@@ -215,8 +257,10 @@ _CSS = """
   .fl-kpi {padding:.6rem .5rem .55rem;}
   .fl-num {font-size:1.5rem;}
   .fl-klabel {margin-top:.25rem; font-size:.6rem;}
-  .fl-grid {grid-template-columns: 1fr; grid-template-rows: none; gap:14px;
-    grid-template-areas: "hero" "dq" "ci" "infer" "model" "map" "repo" "wiki" "arch";}
+  .fl-grid {grid-template-columns: 1fr; grid-template-rows: none; gap:14px;}
+  .fl-grid-top {grid-template-areas: "hero" "dq" "ci" "infer" "model" "map";}
+  .fl-grid-tail {grid-template-areas: "repo" "wiki" "arch";}
+  .fl-archhead {flex-direction:column; align-items:flex-start; gap:.4rem;}
   .fl-img .fl-figwrap {min-height: 160px;}
   .fl-tile[style*="hero"] .fl-figwrap {min-height: 220px;}
   .fl-fact {min-height: 150px;}
