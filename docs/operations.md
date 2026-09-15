@@ -32,6 +32,6 @@ Secrets are not committed. Use `.env`, local secret stores, deployment secret ma
 
 Public project page:
 
-- <https://surya.vaddhiparthy.com/finlens/>
+- <https://srivaddhiparthy.com/finlens/>
 
 The public page is the recruiter-facing presentation surface. This repository remains the engineering evidence behind that surface.

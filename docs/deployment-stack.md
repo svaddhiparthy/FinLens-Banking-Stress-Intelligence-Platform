@@ -2,7 +2,7 @@
 
 Target public application:
 
-- `https://surya.vaddhiparthy.com/finlens/`
+- `https://srivaddhiparthy.com/finlens/`
 
 ## Runtime Layers
 
@@ -30,7 +30,7 @@ Target public application:
 
 ## Current Production State
 
-- Public app: `https://surya.vaddhiparthy.com/finlens/`
+- Public app: `https://srivaddhiparthy.com/finlens/`
 - Health endpoint: `https://finlens-api.vaddhiparthy.vip/healthz`
 - Monitoring: `https://uptime.vaddhiparthy.vip`
 - FDIC, FRED, QBP, and NIC source runs are populated when the corresponding source contracts are enabled.
