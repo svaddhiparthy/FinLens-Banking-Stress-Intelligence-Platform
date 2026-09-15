@@ -32,3 +32,22 @@ def test_loads_central_portfolio_identity(monkeypatch) -> None:
     assert identity.display_name == "Sri Vaddhiparthy"
     assert identity.portfolio_url == "https://srivaddhiparthy.com/"
     assert identity.github_url == "https://github.com/svaddhiparthy/"
+
+
+def test_applies_central_identity_to_current_urls(monkeypatch) -> None:
+    monkeypatch.setattr(
+        identity_module,
+        "public_identity",
+        lambda: identity_module.PublicIdentity(
+            "Example Name",
+            "https://example.test/",
+            "https://github.com/example/",
+        ),
+    )
+
+    rendered = identity_module.apply_public_identity(
+        "Sri Vaddhiparthy https://srivaddhiparthy.com/x "
+        "https://github.com/svaddhiparthy/project"
+    )
+
+    assert rendered == "Example Name https://example.test/x https://github.com/example/project"
