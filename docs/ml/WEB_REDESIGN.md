@@ -33,7 +33,7 @@ The three "views" are woven into a single story, not separate pages:
 │  Bank Financial-Distress Early-Warning                                        │
 │  A production-grade ML system on 448,661 FDIC bank-quarters.                  │
 │  [ PR-AUC 0.22 vs 0.11 logit ]  [ 8,803 banks ]  [ 2008–2026 ]  [ live ]      │
-│  Surya Vaddhiparthy · Senior Data Engineer → MLE          [Try the Live Lab →]│
+│  Sri Vaddhiparthy · Data Engineer → MLE                   [Try the Live Lab →]│
 ├───────────────────────────────────────────────────────────────────────────┤
 │ THE PROBLEM  (Business view, visualized)                                      │
 │  short framing + chart: US bank failures by quarter (2008-12 wave, 2023 SVB)  │

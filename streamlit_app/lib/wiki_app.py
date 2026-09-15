@@ -21,6 +21,7 @@ import mistune
 
 from streamlit_app.lib import wiki_architecture as wa
 from streamlit_app.lib import wiki_structure as ws
+from streamlit_app.lib.public_identity import apply_public_identity
 
 ARCH_SLUG = ws.slug("System Architecture")
 _LINK = re.compile(r"\[\[([^\]]+)\]\]")
@@ -56,7 +57,9 @@ def _payload() -> dict:
         sec_title = sec[1] if sec else ""
         branch = a.get("branch") or ""
         crumb = f"{sec_title} / {branch}" if branch and branch != sec_title else sec_title
-        body_html = _md(_wikilinks(a.get("body", "")))
+        summary = apply_public_identity(a.get("summary", ""))
+        body = apply_public_identity(a.get("body", ""))
+        body_html = _md(_wikilinks(body))
         prev_t = order[i - 1] if i > 0 else None
         next_t = order[i + 1] if i < len(order) - 1 else None
         # "suggested article" set: same-section siblings, then prev/next, deduped, max 6.
@@ -66,7 +69,7 @@ def _payload() -> dict:
                 sugg.append(t)
         out[ws.slug(title)] = {
             "title": title,
-            "summary": a.get("summary", ""),
+            "summary": summary,
             "html": body_html,
             "crumb": crumb,
             "prev": ws.slug(prev_t) if prev_t else None,
@@ -74,7 +77,7 @@ def _payload() -> dict:
             "next": ws.slug(next_t) if next_t else None,
             "nextT": next_t,
             "sugg": [{"slug": ws.slug(t), "title": t} for t in sugg[:6]],
-            "search": " ".join([title, a.get("summary", ""), a.get("body", "")]).lower(),
+            "search": " ".join([title, summary, body]).lower(),
         }
     # the System Architecture article carries the live Graphviz DOT; the SPA renders it client-side
     # (viz.js + svg-pan-zoom) so the diagram is interactive in-place — no cross-frame navigation.

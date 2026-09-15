@@ -18,6 +18,7 @@ services:
       - /opt/platform/vault/secrets/professional/finlens.env
     environment:
       POSTGRES_SYNC_DSN: postgresql://finlens:finlens@professional-finlens-db:5432/finlens
+      PORTFOLIO_PROFILE_URL: http://portfolio-qa-site:8088/data/site-content.json
     volumes:
       - ./data:/app/data
       - ./.duckdb:/app/.duckdb
@@ -45,6 +46,7 @@ services:
       - /opt/platform/vault/secrets/professional/finlens.env
     environment:
       POSTGRES_SYNC_DSN: postgresql://finlens:finlens@professional-finlens-db:5432/finlens
+      PORTFOLIO_PROFILE_URL: http://portfolio-qa-site:8088/data/site-content.json
     command:
       - streamlit
       - run
