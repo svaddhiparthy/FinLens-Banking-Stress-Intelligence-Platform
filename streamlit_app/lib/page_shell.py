@@ -1,8 +1,11 @@
 # ruff: noqa: E501
 from datetime import datetime
+from html import escape
 from zoneinfo import ZoneInfo
 
 import streamlit as st
+
+from streamlit_app.lib.public_identity import public_identity
 
 BUSINESS_PAGE = "business"
 TECHNICAL_PAGE = "technical"
@@ -143,9 +146,10 @@ def render_sidebar(active_page: str, mode: str) -> None:
         _render_sidebar_sections(active_page, mode)
         st.markdown('<div class="rail-foot">', unsafe_allow_html=True)
         _render_sidebar_clock()
+        identity = public_identity()
         st.markdown(
-            '<a class="sidebar-credit" href="https://surya.vaddhiparthy.com" '
-            'target="_blank">Built by Sri Surya S. Vaddhiparthy</a></div>',
+            f'<a class="sidebar-credit" href="{escape(identity.portfolio_url, quote=True)}" '
+            f'target="_blank">Built by {escape(identity.display_name)}</a></div>',
             unsafe_allow_html=True,
         )
 
@@ -197,6 +201,7 @@ def status_ribbon(text: str) -> None:
 def page_footer() -> None:
     """Consistent site footer on every page: anchors short pages and carries the
     standing provenance/credit so no page ends in dead space."""
+    identity = public_identity()
     st.markdown(
         '<div class="site-footer">'
         '<span class="site-footer-brand">FinLens</span>'
@@ -204,8 +209,8 @@ def page_footer() -> None:
         'An AI/ML portfolio project. Models can and will make mistakes; for any decision about a '
         'bank or financial institution, rely only on official U.S. government sources.</span>'
         '<span class="site-footer-right">'
-        '<a class="name-link" href="https://surya.vaddhiparthy.com/" target="_blank" '
-        'rel="noopener">Surya Vaddhiparthy</a>'
+        f'<a class="name-link" href="{escape(identity.portfolio_url, quote=True)}" target="_blank" '
+        f'rel="noopener">{escape(identity.display_name)}</a>'
         '<span class="site-footer-rights">All rights reserved</span></span>'
         '</div>',
         unsafe_allow_html=True,
@@ -336,6 +341,9 @@ def render_nav(active_page: str, mode: str) -> None:
     everywhere. A popover (not the native sidebar) is used because expander toggles inside it are
     client-side, so the panel stays open while a group expands."""
     _set_surface_mode(mode)
+    identity = public_identity()
+    identity_url = escape(identity.portfolio_url, quote=True)
+    identity_name = escape(identity.display_name)
     set_meta_description("home" if mode == "home" else mode)
     st.markdown('<div class="nav-anchor"></div>', unsafe_allow_html=True)
     bar_l, bar_c, bar_r = st.columns([1, 3, 1], vertical_alignment="center")
@@ -348,8 +356,8 @@ def render_nav(active_page: str, mode: str) -> None:
     with bar_r:
         st.markdown(
             '<div class="hdr-name">'
-            '<a class="name-link" href="https://surya.vaddhiparthy.com/" target="_blank" '
-            'rel="noopener"><span class="hdr-name-main">Surya Vaddhiparthy</span></a>'
+            f'<a class="name-link" href="{identity_url}" target="_blank" '
+            f'rel="noopener"><span class="hdr-name-main">{identity_name}</span></a>'
             '<span class="hdr-name-cred">M.S. Data Science</span></div>',
             unsafe_allow_html=True,
         )
@@ -362,8 +370,8 @@ def render_nav(active_page: str, mode: str) -> None:
                 '<span class="ham-brand-tag">Banking Stress Intelligence</span></div>'
                 '<div class="ham-metarow">'
                 f'<span class="ham-meta-date">{_date}</span>'
-                '<a class="name-link" href="https://surya.vaddhiparthy.com/" target="_blank" '
-                'rel="noopener"><span class="ham-meta-name">Surya Vaddhiparthy</span></a></div>'
+                f'<a class="name-link" href="{identity_url}" target="_blank" '
+                f'rel="noopener"><span class="ham-meta-name">{identity_name}</span></a></div>'
                 f'<div class="ham-meta-time">{now.strftime("%I:%M %p ET")}</div>'
                 '<div class="ham-navlabel">Navigation</div>',
                 unsafe_allow_html=True,
@@ -381,8 +389,8 @@ def render_nav(active_page: str, mode: str) -> None:
                          icon=":material/forum:"):
                 st.switch_page("pages/9_AI_Inference.py")
             st.markdown(
-                '<a class="ham-credit" href="https://surya.vaddhiparthy.com" target="_blank">'
-                'Built by Surya Vaddhiparthy</a>', unsafe_allow_html=True,
+                f'<a class="ham-credit" href="{identity_url}" target="_blank">'
+                f'Built by {identity_name}</a>', unsafe_allow_html=True,
             )
 
 
