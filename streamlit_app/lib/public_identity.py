@@ -11,6 +11,7 @@ from urllib.request import Request, urlopen
 DEFAULT_PROFILE_URL = "https://srivaddhiparthy.com/data/site-content.json"
 DEFAULT_DISPLAY_NAME = "Sri Vaddhiparthy"
 DEFAULT_PORTFOLIO_URL = "https://srivaddhiparthy.com/"
+DEFAULT_GITHUB_URL = "https://github.com/svaddhiparthy/"
 PROFILE_CACHE_SECONDS = 300
 
 
@@ -39,7 +40,7 @@ def _load_public_identity(profile_url: str) -> PublicIdentity:
     return PublicIdentity(
         display_name=display_name,
         portfolio_url=str(record.get("portfolio_url") or DEFAULT_PORTFOLIO_URL).strip(),
-        github_url=str(record.get("github_url") or "").strip(),
+        github_url=str(record.get("github_url") or DEFAULT_GITHUB_URL).strip(),
     )
 
 
@@ -57,7 +58,11 @@ def public_identity() -> PublicIdentity:
         try:
             identity = _load_public_identity(profile_url)
         except Exception:
-            identity = PublicIdentity(DEFAULT_DISPLAY_NAME, DEFAULT_PORTFOLIO_URL, "")
+            identity = PublicIdentity(
+                DEFAULT_DISPLAY_NAME,
+                DEFAULT_PORTFOLIO_URL,
+                DEFAULT_GITHUB_URL,
+            )
         _profile_cache = (now + PROFILE_CACHE_SECONDS, identity)
         return identity
 
@@ -71,4 +76,8 @@ def apply_public_identity(text: str) -> str:
         "Sri Vaddhiparthy",
     ):
         text = text.replace(legacy_name, identity.display_name)
-    return text.replace("https://surya.vaddhiparthy.com", identity.portfolio_url.rstrip("/"))
+    for origin in ("https://surya.vaddhiparthy.com", "https://srivaddhiparthy.com"):
+        text = text.replace(origin, identity.portfolio_url.rstrip("/"))
+    for profile in ("https://github.com/vaddhiparthy", "https://github.com/svaddhiparthy"):
+        text = text.replace(profile, identity.github_url.rstrip("/"))
+    return text
