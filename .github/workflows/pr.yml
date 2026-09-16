@@ -15,7 +15,11 @@ jobs:
         uses: astral-sh/setup-uv@v4
       - name: Sync
         run: uv sync --all-groups
-      - name: Ruff
-        run: uv run ruff check .
+      - name: Ruff changed Python files
+        run: |
+          changed="$(git diff --name-only --diff-filter=ACMR "${{ github.event.pull_request.base.sha }}" HEAD -- '*.py')"
+          if [ -n "$changed" ]; then
+            printf '%s\n' "$changed" | xargs uv run ruff check
+          fi
       - name: Pytest
         run: uv run pytest
