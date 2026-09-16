@@ -10,7 +10,10 @@ from urllib.request import Request, urlopen
 
 DEFAULT_DISPLAY_NAME = "Sri Vaddhiparthy"
 PROFILE_CACHE_SECONDS = 300
-_DOMAIN = re.compile(r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$|^localhost$", re.I)
+_DOMAIN = re.compile(
+    r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$|^localhost$",
+    re.I,
+)
 
 
 @dataclass(frozen=True)
@@ -88,6 +91,10 @@ def apply_public_identity(text: str) -> str:
         "Sri Vaddhiparthy",
     ):
         text = text.replace(legacy_name, identity.display_name)
-    text = re.sub(r"https://(?:surya\.|sri)?vaddhiparthy\.com", identity.portfolio_url.rstrip("/"), text)
+    text = re.sub(
+        r"https://(?:surya\.|sri)?vaddhiparthy\.com",
+        identity.portfolio_url.rstrip("/"),
+        text,
+    )
     text = re.sub(r"https://github\.com/(?:vaddhiparthy|svaddhiparthy)[^\s)\]]*", "", text)
     return text
