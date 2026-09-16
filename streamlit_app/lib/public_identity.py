@@ -8,22 +8,35 @@ from threading import Lock
 from time import monotonic
 from urllib.request import Request, urlopen
 
-DEFAULT_PROFILE_URL = "https://srivaddhiparthy.com/data/site-content.json"
 DEFAULT_DISPLAY_NAME = "Sri Vaddhiparthy"
-DEFAULT_PORTFOLIO_URL = "https://srivaddhiparthy.com/"
-DEFAULT_GITHUB_URL = "https://github.com/svaddhiparthy/"
 PROFILE_CACHE_SECONDS = 300
+_DOMAIN = re.compile(
+    r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$|^localhost$",
+    re.I,
+)
 
 
 @dataclass(frozen=True)
 class PublicIdentity:
     display_name: str
+    short_name: str
     portfolio_url: str
-    github_url: str
+    contact_url: str
 
 
 _profile_cache: tuple[float, PublicIdentity] | None = None
 _profile_cache_lock = Lock()
+
+
+def _site_origin() -> str:
+    domain = os.getenv("SITE_DOMAIN", "localhost").strip().lower().rstrip(".")
+    if not _DOMAIN.fullmatch(domain):
+        domain = "localhost"
+    return f"https://{domain}"
+
+
+def _default_profile_url() -> str:
+    return f"{_site_origin()}/data/site-content.json"
 
 
 def _load_public_identity(profile_url: str) -> PublicIdentity:
@@ -39,8 +52,9 @@ def _load_public_identity(profile_url: str) -> PublicIdentity:
         raise ValueError("central public display name is invalid")
     return PublicIdentity(
         display_name=display_name,
-        portfolio_url=str(record.get("portfolio_url") or DEFAULT_PORTFOLIO_URL).strip(),
-        github_url=str(record.get("github_url") or DEFAULT_GITHUB_URL).strip(),
+        short_name=str(record.get("short_name") or display_name).strip()[:100],
+        portfolio_url=_site_origin() + "/",
+        contact_url="/contact",
     )
 
 
@@ -54,14 +68,15 @@ def public_identity() -> PublicIdentity:
         now = monotonic()
         if _profile_cache and now < _profile_cache[0]:
             return _profile_cache[1]
-        profile_url = os.getenv("PORTFOLIO_PROFILE_URL", DEFAULT_PROFILE_URL).strip()
+        profile_url = os.getenv("PORTFOLIO_PROFILE_URL", _default_profile_url()).strip()
         try:
             identity = _load_public_identity(profile_url)
         except Exception:
             identity = PublicIdentity(
                 DEFAULT_DISPLAY_NAME,
-                DEFAULT_PORTFOLIO_URL,
-                DEFAULT_GITHUB_URL,
+                DEFAULT_DISPLAY_NAME,
+                _site_origin() + "/",
+                "/contact",
             )
         _profile_cache = (now + PROFILE_CACHE_SECONDS, identity)
         return identity
@@ -76,8 +91,10 @@ def apply_public_identity(text: str) -> str:
         "Sri Vaddhiparthy",
     ):
         text = text.replace(legacy_name, identity.display_name)
-    for origin in ("https://surya.vaddhiparthy.com", "https://srivaddhiparthy.com"):
-        text = text.replace(origin, identity.portfolio_url.rstrip("/"))
-    for profile in ("https://github.com/vaddhiparthy", "https://github.com/svaddhiparthy"):
-        text = text.replace(profile, identity.github_url.rstrip("/"))
+    text = re.sub(
+        r"https://(?:surya\.|sri)?vaddhiparthy\.com",
+        identity.portfolio_url.rstrip("/"),
+        text,
+    )
+    text = re.sub(r"https://github\.com/(?:vaddhiparthy|svaddhiparthy)[^\s)\]]*", "", text)
     return text

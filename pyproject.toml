@@ -11,7 +11,7 @@ dependencies = [
   "fastapi>=0.115.0",
   "mistune>=3.0.0",
   "pandas>=2.2.3,<3",
-  "plotly>=6.0.0",
+  "plotly>=5.10.0,<6",
   "psycopg[binary]>=3.2.9",
   "pydantic-settings>=2.6.0",
   "python-dotenv>=1.0.1",
@@ -38,10 +38,8 @@ ml = [
   "skops>=0.11",
   "fairlearn>=0.12",
 ]
-# evidently pins plotly<6, which is mutually exclusive with the app's plotly>=6 in a
-# single resolved environment. It therefore lives in its OWN extra and is installed
-# isolated (the monitoring job uses only evidently's programmatic Report API, no
-# plotly rendering). Keeping it out of `ml` lets `uv sync --extra ml` resolve cleanly.
+# Evidently requires Plotly below v6, so the shared application range remains within
+# its supported contract and the universal lock can resolve every optional group.
 monitor = [
   "evidently>=0.7",
 ]
