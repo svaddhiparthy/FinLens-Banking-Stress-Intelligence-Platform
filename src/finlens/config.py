@@ -11,8 +11,8 @@ load_dotenv(dotenv_path=Path(".env"), override=False)
 class Settings(BaseSettings):
     project_name: str = "FinLens"
     finlens_environment: str = "local"
-    root_domain: str = "vaddhiparthy.com"
-    project_domain: str = "srivaddhiparthy.com"
+    site_domain: str = "localhost"
+    project_domain: str | None = None
     finlens_data_mode: str = "live"
     finlens_active_sources: str = "fdic,fred,qbp,nic"
     finlens_artifact_dir: str = "data"
@@ -52,6 +52,11 @@ class Settings(BaseSettings):
     cloudflare_api_token: str | None = None
     streamlit_app_title: str = "FinLens Dashboard"
     fastapi_env: str = "local"
+
+    @property
+    def public_origin(self) -> str:
+        """Configured portfolio origin; never infer it from a request host."""
+        return f"https://{self.site_domain}"
 
     model_config = SettingsConfigDict(
         env_file=".env",
