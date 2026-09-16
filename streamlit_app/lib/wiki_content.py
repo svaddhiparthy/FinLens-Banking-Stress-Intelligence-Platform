@@ -9,9 +9,8 @@ ARTICLES = {'About FinLens': {'cluster': 'Orientation',
                               'serves them through a deliberately small business surface and two substantive '
                               'engineering surfaces (Data Engineering and AI Engineering). The goal is to demonstrate '
                               'end-to-end data and ML engineering on a real banking problem.',
-                   'body': 'FinLens is built and maintained by [Sri Vaddhiparthy](https://srivaddhiparthy.com/) (M.S., Data Science) as a '
-                           'portfolio project at `https://srivaddhiparthy.com/finlens/`. The platform is documented '
-                           'in full at the same address.\n'
+                   'body': 'FinLens is built and maintained by Sri Vaddhiparthy (M.S., Data Science) as a '
+                           'portfolio project. The platform is documented in the application.\n'
                            '\n'
                            'It is worth being clear about what FinLens is not: it is not a regulator, not a bank, not an '
                            'investment advisor, and not a failure-prediction service. The Predictive Analytics surface '
@@ -43,8 +42,7 @@ ARTICLES = {'About FinLens': {'cluster': 'Orientation',
                                        'boring, and a platform that says useful things but is engineered badly falls '
                                        'apart the moment it has to be maintained.\n'
                                        '\n'
-                                       'The author portfolio lives at `https://srivaddhiparthy.com`. Contact '
-                                       'details, the source code, and other projects are reachable from the portfolio root.\n'
+                                       'Contact details and other projects are available from the portfolio root.\n'
                                        '\n'
                                        '---'},
  'Banking Industry Stress, Defined': {'cluster': 'Banking & Risk',
@@ -1103,7 +1101,7 @@ ARTICLES = {'About FinLens': {'cluster': 'Orientation',
                                'over the warehouse output.'},
  'Edge and Operations': {'cluster': 'Serving',
                          'branch': 'Serving',
-                         'summary': 'Cloudflare is the edge for the public domain `srivaddhiparthy.com`. It is used '
+                         'summary': 'Cloudflare is the edge for the configured public domain. It is used '
                                     'for TLS termination, optional Turnstile bot protection on the telemetry POST '
                                     'endpoint, and DNS. Cloudflare was chosen for free-tier coverage and DNS '
                                     'simplicity.',
@@ -1355,7 +1353,7 @@ ARTICLES = {'About FinLens': {'cluster': 'Orientation',
                                     'Streamlit serves the user-facing application. FastAPI serves the machine-facing '
                                     'health and read endpoints. Uptime Kuma monitors service reachability. Postgres '
                                     'holds the control-plane state synchronised from local telemetry.',
-                         'body': 'The public route is `https://srivaddhiparthy.com/finlens/`. It is placed on a path '
+                         'body': 'The public route is `/finlens/` on the configured portfolio origin. It is placed on a path '
                                  'under the main portfolio because Streamlit is naturally simpler at a root path; '
                                  'routing under a subpath is doable but needs careful Caddy reverse-proxy '
                                  'configuration to handle WebSocket asset paths correctly.\n'
