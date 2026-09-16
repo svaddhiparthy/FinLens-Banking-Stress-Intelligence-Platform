@@ -16,7 +16,7 @@ The project is aligned to the resume-grade stack:
 
 Target public domain:
 
-- `https://srivaddhiparthy.com/finlens/`
+- configured portfolio `/finlens/` route
 
 ## Active Product Scope
 
@@ -71,7 +71,7 @@ Removed from active scope:
 
 ## Runtime Status
 
-- Streamlit is live at `https://srivaddhiparthy.com/finlens/`.
+- Streamlit is served at the configured portfolio `/finlens/` route.
 - FastAPI health is live at `https://finlens-api.vaddhiparthy.vip/healthz`.
 - Uptime Kuma is live at `https://uptime.vaddhiparthy.vip`.
 - FDIC ingest is populated.

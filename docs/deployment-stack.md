@@ -2,7 +2,7 @@
 
 Target public application:
 
-- `https://srivaddhiparthy.com/finlens/`
+- the configured portfolio `/finlens/` route
 
 ## Runtime Layers
 
@@ -30,7 +30,7 @@ Target public application:
 
 ## Current Production State
 
-- Public app: `https://srivaddhiparthy.com/finlens/`
+- Public app: configured portfolio `/finlens/` route
 - Health endpoint: `https://finlens-api.vaddhiparthy.vip/healthz`
 - Monitoring: `https://uptime.vaddhiparthy.vip`
 - FDIC, FRED, QBP, and NIC source runs are populated when the corresponding source contracts are enabled.
