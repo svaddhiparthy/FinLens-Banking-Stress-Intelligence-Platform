@@ -13,8 +13,8 @@ for sub in ("", "src", "ml"):
     if p not in sys.path:
         sys.path.insert(0, p)
 
-from streamlit_app.lib.page_shell import home_navigation, page_footer
 from streamlit_app.lib.landing import render_landing
+from streamlit_app.lib.page_shell import home_navigation, page_footer
 from streamlit_app.lib.telemetry import record_page_view
 from streamlit_app.lib.theme import app_css, ensure_theme_state, get_theme_mode
 from streamlit_app.lib.ui_components import inject_styles
@@ -159,6 +159,15 @@ def _disclaimer_persistence() -> None:
               attempts += 1;
               if (acknowledgeNotice() || attempts >= 60) { window.clearInterval(timer); }
             }, 100);
+          }
+          var Observer = window.parent.MutationObserver;
+          var root = doc.body || doc.documentElement;
+          function acknowledgeWhenReady() {
+            if (accepted() && acknowledgeNotice()) { obs.disconnect(); }
+          }
+          if (root && Observer) {
+            var obs = new Observer(acknowledgeWhenReady);
+            obs.observe(root, { childList: true, subtree: true });
           }
           doc.addEventListener('click', function (e) {
             var b = e.target && e.target.closest ? e.target.closest('button') : null;
