@@ -221,7 +221,7 @@ def page_footer() -> None:
 
 def page_intro(eyebrow: str, title: str, copy: str, wiki_slug: str | None = None) -> None:
     link = (
-        f'<a class="page-wiki-link" href="/Wiki?article={wiki_slug}" target="_self">'
+        f'<a class="page-wiki-link" href="Wiki?article={wiki_slug}" target="_self">'
         "Read the full article in the Wiki ›</a>"
         if wiki_slug else ""
     )
