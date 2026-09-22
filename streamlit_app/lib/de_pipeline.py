@@ -27,17 +27,6 @@ def pipeline_status_frame() -> pd.DataFrame:
     return pd.DataFrame(pipeline_status_rows())
 
 
-def _status_color(status: str, palette: dict[str, str]) -> str:
-    return {
-        "Success": "rgba(121, 183, 175, 0.55)",
-        "Failed": "rgba(212, 139, 102, 0.55)",
-        "Running": "rgba(179, 141, 91, 0.55)",
-        "Missing Data": "rgba(180, 170, 156, 0.5)",
-        "Deferred": "rgba(180, 170, 156, 0.35)",
-        "Not Activated": "rgba(180, 170, 156, 0.35)",
-    }.get(status, palette["text_soft"])
-
-
 def dag_chart(frame: pd.DataFrame) -> go.Figure:
     link_colors = []
     link_labels = []

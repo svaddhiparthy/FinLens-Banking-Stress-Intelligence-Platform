@@ -11,8 +11,6 @@ imports ``finlens.aws`` / ``boto3`` / ``snowflake`` ($0 invariant).
 
 from __future__ import annotations
 
-from pathlib import Path
-
 import pandas as pd
 
 from finlens.paths import RAW_DATA_DIR
@@ -105,16 +103,3 @@ def build_panel(
     return fin
 
 
-def materialize_panel(duckdb_path: Path, panel: pd.DataFrame, schema: str = "ml") -> int:
-    """Persist the panel to an immutable DuckDB table (the visible DE/AI artifact)."""
-    import duckdb
-
-    duckdb_path.parent.mkdir(parents=True, exist_ok=True)
-    with duckdb.connect(str(duckdb_path)) as conn:
-        conn.execute(f"create schema if not exists {schema}")
-        conn.register("panel_df", panel)
-        conn.execute(
-            f"create or replace table {schema}.bank_quarter_panel as select * from panel_df"
-        )
-        count = conn.execute(f"select count(*) from {schema}.bank_quarter_panel").fetchone()[0]
-    return int(count)

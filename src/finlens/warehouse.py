@@ -35,10 +35,6 @@ def _latest_source_json(source: str) -> dict | None:
     return json.loads(latest.read_text(encoding="utf-8"))
 
 
-def latest_source_manifest(source: str) -> dict | None:
-    return _latest_source_json(source)
-
-
 def _artifact_path_for_runtime(source: str, payload: dict) -> Path | None:
     artifact_path = payload.get("artifact_path")
     if not artifact_path:

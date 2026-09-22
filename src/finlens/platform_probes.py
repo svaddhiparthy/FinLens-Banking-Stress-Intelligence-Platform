@@ -231,5 +231,3 @@ def summarize_probe(name: str, payload: dict[str, Any]) -> str:
     return f"{name}: {status}. {detail}".strip()
 
 
-def local_path_exists(path: str | Path) -> bool:
-    return Path(path).exists()
