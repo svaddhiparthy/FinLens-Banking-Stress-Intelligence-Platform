@@ -6,8 +6,6 @@ FinLens is an end-to-end banking stress intelligence platform that turns free pu
 
 **Live:** [vaddhiparthy.com/FinLens-Banking-Stress-Intelligence-Platform](https://vaddhiparthy.com/FinLens-Banking-Stress-Intelligence-Platform/)
 
-**Portfolio:** [vaddhiparthy.com](https://vaddhiparthy.com/) | [Data Platforms](https://vaddhiparthy.com/data-platforms)
-
 ---
 
 ## What It Does
@@ -95,7 +93,7 @@ Calibration: ECE 1.22e-04; in the top-scoring decile the model predicts 0.0035 v
 
 ## License
 
-This project is proprietary. All rights reserved. No use, copying, modification, distribution, or commercial use is permitted without the author's prior written authorization. See [LICENSE](LICENSE).
+This project is proprietary. All rights reserved. No use, copying, modification, distribution, or commercial use is permitted without the author's prior written authorization. See `LICENSE`.
 
 ---
 
