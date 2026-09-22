@@ -25,3 +25,4 @@ nav:
       - ADR 0005: docs/adr/0005-airflow-cosmos.md
       - ADR 0006: docs/adr/0006-quality-split.md
       - ADR 0008: docs/adr/0008-terraform-boundary.md
+      - ADR 0009: docs/adr/0009-vps-local-storage.md

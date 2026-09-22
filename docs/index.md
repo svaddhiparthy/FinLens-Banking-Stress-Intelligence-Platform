@@ -8,7 +8,7 @@ engineering backbone.
 - `Stress Pulse`
 - `Failure Forensics`
 - `Macro Transmission`
-- `Predictive Analytics` (planned)
+- `Predictive Analytics` (live, model-backed)
 - `Wiki`
 
 ## Technical Surface
@@ -24,17 +24,19 @@ engineering backbone.
 The Streamlit Architecture Decisions tab is the in-app knowledge surface. These markdown docs are
 the repository-facing companion for code review, onboarding, and implementation history.
 
-## Resume Stack
+## Platform Stack
 
-- AWS S3 for bronze artifacts
+- Local filesystem (`data/raw`, Hive-partitioned by source and ingestion date) for bronze artifacts
 - Airflow for orchestration
-- dbt for transformations
-- Terraform for provisioning
-- Snowflake for warehouse-grade modeling
+- dbt on DuckDB for transformations
+- Snowflake as an optional, credential-gated dbt target
 - FastAPI for health and telemetry
 - Streamlit for presentation
 - Cloudflare for the public edge
 - Postgres for home control-plane sync
+
+AWS S3 and Terraform were removed by ADR 0009; no cloud object store or infrastructure-as-code
+remains on the live path.
 
 ## Active Source Policy
 

@@ -27,17 +27,20 @@ Core Silver entities:
 
 ## Gold
 
-Gold is the only layer the UI reads from.
+Gold is the only layer the UI reads from. The tables below are the current contracts, built by
+dbt into the `marts` schema (plus `dim_acquirer`, materialized during the DuckDB load).
 
-Current Gold contracts:
-- `gold_stress_pulse_metrics`
-- `gold_stress_pulse_timeseries`
-- `gold_failure_forensics_summary`
-- `gold_failure_forensics_events`
-- `gold_macro_transmission_series`
-- `gold_macro_transmission_lag_view`
-- `gold_control_room_status`
-- `gold_control_room_reconciliation`
+| Table | Grain |
+| --- | --- |
+| `bank_quarterly_risk_facts` | one row per `(cert, quarter)` - CAMELS-aligned risk ratios |
+| `fct_bank_failures` | one row per failed institution |
+| `fct_financial_metrics` | one row per `(series_id, date)`, incremental |
+| `fct_stress_pulse` | one row per quarter of industry aggregates |
+| `fct_stress_pulse_annual_legacy` | one row per preserved pre-cutover annual aggregate |
+| `dim_date` | one row per date |
+| `dim_state` | one row per state code (Type 1) |
+| `dim_acquirer` | one row per `(acquirer, decade)` |
+| `snapshots.dim_bank_snapshot` | SCD Type 2 history of the bank dimension |
 
 ## Rules
 
@@ -48,7 +51,7 @@ Current Gold contracts:
 
 ## Warehouse Target
 
-The local runtime uses DuckDB for fast development and smoke testing. The resume-stack target is
-Snowflake, with dbt owning the transformation contract between raw/staging/intermediate/mart
-schemas. Streamlit should continue to read stable Gold outputs regardless of whether the backing
-engine is local DuckDB or Snowflake.
+DuckDB is the warehouse of record (ADR 0002, ADR 0009), with dbt owning the transformation
+contract between the raw, staging, intermediate and mart schemas. Snowflake remains an optional,
+credential-gated dbt target. Streamlit reads stable Gold outputs regardless of which engine
+backs them.
