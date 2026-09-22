@@ -70,7 +70,6 @@ select = ["E", "F", "I", "B", "UP"]
 # and notebook-style exploratory code. Core pipeline code keeps the full rule set.
 "ml/scripts/**" = ["E501", "E702"]
 "ml/notebooks/**" = ["E402", "E501", "E702"]
-"scripts/dump_validation.py" = ["E501"]
 # Markdown model-card template: table rows must stay on one line.
 "ml/finlens_ml/model_card.py" = ["E501"]
 

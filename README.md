@@ -275,7 +275,8 @@ Bring up Airflow locally (LocalExecutor, Postgres metadata DB; the UI is served 
 docker compose -f airflow/docker-compose.yml up
 ```
 
-On Windows, `scripts/start_finlens.ps1` and `scripts/start_api.ps1` wrap the same commands.
+On Windows, `scripts/uv_sync.ps1` provisions the virtualenv and `scripts/start_finlens.ps1`,
+`scripts/start_api.ps1` and `scripts/smoke_test.ps1` wrap the same commands.
 
 ---
 
