@@ -1,5 +1,7 @@
 # FinLens — Banking Stress Intelligence Platform
 
+[![CI](https://github.com/Vaddhiparthy/FinLens-Banking-Stress-Intelligence-Platform/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/Vaddhiparthy/FinLens-Banking-Stress-Intelligence-Platform/actions/workflows/main.yml)
+
 FinLens is an end-to-end banking stress intelligence platform that turns free public data from the FDIC, FFIEC, and Federal Reserve into a calibrated, explainable early-warning read on U.S. bank distress. It covers the full stack: automated ingestion of four official regulatory feeds, a medallion data model built on DuckDB and dbt, a discrete-time hazard model that produces a 4-quarter distress probability for every FDIC-insured institution, and four analyst-facing Streamlit surfaces backed by a FastAPI service and a retrieval-augmented assistant — all orchestrated with Airflow and gated by layered data quality checks.
 
 **Live:** [vaddhiparthy.com/FinLens-Banking-Stress-Intelligence-Platform](https://vaddhiparthy.com/FinLens-Banking-Stress-Intelligence-Platform/)
