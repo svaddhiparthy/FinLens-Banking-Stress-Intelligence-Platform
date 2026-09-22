@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pytest
-
 from finlens_ml.config import get_ml_settings
 
 _HAS = (get_ml_settings().artifact_dir / "calibrated_h4.skops").exists() or (
@@ -20,7 +19,6 @@ _HEALTHY = {"tier1_rwa_ratio": 16.0, "roa": 1.4, "equity_to_assets": 12.0,
 def _client():
     pytest.importorskip("shap")
     from fastapi.testclient import TestClient
-
     from finlens_ml.serve import app
 
     return TestClient(app)

@@ -71,6 +71,7 @@ _SIGN = {-1: "lower raises risk (-1)", 1: "higher raises risk (+1)", 0: "unconst
 def render_charts() -> dict:
     """Render the key Plotly figures to base64 PNGs via Playwright (no kaleido)."""
     from playwright.sync_api import sync_playwright
+
     from streamlit_app.lib import ml_charts as mc
     mc.load_viz_pack.cache_clear()
     viz = mc.load_viz_pack() or {}
@@ -131,7 +132,7 @@ def _img(charts, key, caption):
 def main() -> None:
     from finlens_ml.features import FEATURE_COLUMNS, MONOTONE_CONSTRAINTS
 
-    m, g0, b1, cr, cal, viz = (_j("metrics_h4.json"), _j("g0_power_sim.json"),
+    m, g0, b1, cr, cal, _viz = (_j("metrics_h4.json"), _j("g0_power_sim.json"),
                                _j("b1_compare.json"), _j("competing_risks.json"),
                                _j("calibration_bakeoff.json"), _j("viz_pack.json"))
     decomp, seq = _j("failure_decomposition.json"), _j("sequence_challenger.json")
@@ -237,7 +238,7 @@ def main() -> None:
     against bootstrap intervals because at this rare-event rate point estimates are not, by
     themselves, a defensible result.</p>""")
 
-    H.append(f"""<h2>2. Problem framing</h2>
+    H.append("""<h2>2. Problem framing</h2>
     <p>Bank failure is a time-to-event problem: a bank is observed over many quarters, its
     condition changes between filings, and at some point it may close. Modeling it as a single
     static classification throws away the time structure and the censoring. FinLens instead uses
@@ -269,7 +270,7 @@ def main() -> None:
     The project scope is the public FDIC and FFIEC data, and on that data the model sits at its
     ceiling.</div>""")
 
-    H.append(f"""<h2 class="pagebreak">4. Panel construction</h2>
+    H.append("""<h2 class="pagebreak">4. Panel construction</h2>
     <p>The unit of observation is (CERT, quarter), where CERT is the FDIC certificate number and
     the quarter is a Call Report filing. Each row carries that quarter's financial ratios; a bank
     contributes one row per quarter it exists. The pipeline (ml/scripts/build_dataset.py) fetches
@@ -294,7 +295,7 @@ def main() -> None:
     <table><tr><th>Feature</th><th>Definition</th><th>Source</th><th>Monotone sign</th></tr>
     {feat_rows}</table>""")
 
-    H.append(f"""<h2 class="pagebreak">6. Labels and leakage control</h2>
+    H.append("""<h2 class="pagebreak">6. Labels and leakage control</h2>
     <p>For observation quarter q (ordinal), failure quarter f, and last observed quarter L, the
     rule (ml/finlens_ml/labels.py) is:</p>
     <ul>
@@ -310,7 +311,7 @@ def main() -> None:
     guarantees a training row's label window ends strictly before the test window begins; it is
     enforced at runtime by <code>assert_no_temporal_overlap</code>.</p>""")
 
-    H.append(f"""<h2>7. Train/test splits</h2>
+    H.append("""<h2>7. Train/test splits</h2>
     <p>The headline evaluation uses <code>final_holdout_split</code>: the last 28 quarters (about
     2019 to 2026, a long window that contains the 2023 failure cluster) are the out-of-time test
     set, with the embargo applied so no training label peeks into it. Grouping is by CERT, so a
@@ -490,7 +491,7 @@ def main() -> None:
       <li>SHAP is transparency, not a legally sufficient adverse-action reason code.</li>
     </ul>""")
 
-    H.append(f"""<h2>19. Engineering, reproducibility, governance</h2>
+    H.append("""<h2>19. Engineering, reproducibility, governance</h2>
     <p>The system is $0 (free public APIs only), reproducible (fixed seeds, pinned feature set,
     committed metrics), and gated: a CI metric gate blocks promotion of a degraded or leaky model
     (PR-AUC must beat the logit by a margin, OOT ROC must stay below a leakage ceiling, ECE within

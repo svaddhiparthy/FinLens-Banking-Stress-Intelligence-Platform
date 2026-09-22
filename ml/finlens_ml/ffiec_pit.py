@@ -37,7 +37,7 @@ def _read(zf: zipfile.ZipFile, part: str) -> pd.DataFrame | None:
         with zf.open(name) as fh:
             codes = fh.readline().decode("utf-8", "ignore").rstrip("\n").split("\t")
             labs = fh.readline().decode("utf-8", "ignore").rstrip("\n").split("\t")
-        for c, lab in zip(codes, labs):
+        for c, lab in zip(codes, labs, strict=False):
             _LABELS[c.replace('"', "").strip().upper()] = lab.upper()
         with zf.open(name) as fh:
             frames.append(pd.read_csv(fh, sep="\t", dtype=str, skiprows=[1], low_memory=False))

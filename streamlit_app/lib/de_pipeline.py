@@ -11,7 +11,6 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from finlens.pipeline_status import pipeline_status_rows
-from streamlit_app.lib.theme import get_palette
 
 # Timezone options for the "Last run" column. Labels are friendly; values are IANA names whose
 # abbreviation (EDT/EST, etc.) is resolved at format time so DST is always correct.
@@ -40,7 +39,6 @@ def _status_color(status: str, palette: dict[str, str]) -> str:
 
 
 def dag_chart(frame: pd.DataFrame) -> go.Figure:
-    palette = get_palette()
     link_colors = []
     link_labels = []
     for row in frame.itertuples():

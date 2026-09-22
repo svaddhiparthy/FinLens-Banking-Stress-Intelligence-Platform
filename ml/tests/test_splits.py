@@ -5,7 +5,6 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 import pytest
-
 from finlens_ml.splits import (
     assert_no_temporal_overlap,
     final_holdout_split,

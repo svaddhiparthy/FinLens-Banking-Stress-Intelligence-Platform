@@ -21,9 +21,9 @@ ART = REPO / "ml" / "artifacts"
 
 
 def main() -> None:
-    import duckdb
-
     from finlens_ml.config import get_ml_settings
+
+    import duckdb
 
     con = duckdb.connect(str(get_ml_settings().duckdb_path), read_only=True)
     n_rows, n_banks, qmin, qmax = con.execute(

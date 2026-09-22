@@ -40,7 +40,6 @@ from finlens_ml.features import FEATURE_COLUMNS, MONOTONE_CONSTRAINTS
 # %% [markdown]
 # ## 1. The panel
 # One row per bank per quarter. The target is "does this bank fail within 4 quarters".
-
 # %%
 import duckdb
 
@@ -157,9 +156,8 @@ plt.legend(); plt.tight_layout(); plt.show()
 # Global attribution over a sample of the panel, using the served booster.
 
 # %%
-import shap
 import lightgbm as lgb
-
+import shap
 from finlens_ml.scenario import humanize_feature
 
 booster = lgb.Booster(model_file=str(REPO / "ml" / "artifacts" / "booster_h4.txt"))

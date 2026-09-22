@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pytest
-
 from finlens_ml.config import get_ml_settings
 
 _settings = get_ml_settings()
@@ -39,7 +38,8 @@ def test_summarize_parses_drift_result() -> None:
         "metrics": [
             {"metric_name": "DriftedColumnsCount(drift_share=0.5)",
              "value": {"count": 3.0, "share": 0.5}},
-            {"metric_name": "ValueDrift(column=roa,...)", "config": {"column": "roa"}, "value": 0.4},
+            {"metric_name": "ValueDrift(column=roa,...)",
+             "config": {"column": "roa"}, "value": 0.4},
             {"metric_name": "ValueDrift(column=distress_score,...)",
              "config": {"column": "distress_score"}, "value": 0.11},
         ]

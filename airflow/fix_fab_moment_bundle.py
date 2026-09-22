@@ -6,7 +6,6 @@ import argparse
 import json
 from pathlib import Path
 
-
 FAB_ROOT = Path(
     "/home/airflow/.local/lib/python3.11/site-packages/airflow/providers/fab/www"
 )

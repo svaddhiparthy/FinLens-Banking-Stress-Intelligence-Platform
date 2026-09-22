@@ -69,7 +69,8 @@ class PipelineRunRecorder:
 
     def finish(self, status: str | None = None) -> dict[str, Any]:
         if status is None:
-            status = "Degraded" if any(step.status == "Failed" for step in self.steps) else "Success"
+            failed = any(step.status == "Failed" for step in self.steps)
+            status = "Degraded" if failed else "Success"
         finished_at = datetime.now(UTC)
         payload = {
             "run_id": self.run_id,
