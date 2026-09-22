@@ -40,7 +40,7 @@ ml = [
 ]
 # evidently (drift monitoring) pins plotly<6 and cannot coexist with the app's plotly>=6
 # in uv's universal lock, even as an unselected extra. It is deliberately NOT declared here;
-# install it isolated for the monitoring job only, see docs/ml/RUN_LOCAL.md:
+# install it isolated for the monitoring job only:
 #   uv run --isolated --no-project --with "evidently>=0.7" --with pandas python ml/finlens_ml/monitor.py
 
 [dependency-groups]

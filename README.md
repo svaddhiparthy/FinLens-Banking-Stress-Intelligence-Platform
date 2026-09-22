@@ -166,8 +166,8 @@ Key tables and their grain:
 **SCD Type 2.** `dbt/snapshots/dim_bank_snapshot.sql` snapshots the bank dimension with
 `strategy='check'` on `bank_name` and `state`, `unique_key='bank_id'`, into a dedicated
 `snapshots` schema. dbt maintains `dbt_valid_from` / `dbt_valid_to`, so a renamed or
-re-domiciled institution produces a new version row instead of an in-place update. This follows
-ADR 0004: Type 2 for bank-like dimensions, Type 1 for state, Type 0 for date.
+re-domiciled institution produces a new version row instead of an in-place update: Type 2 for
+bank-like dimensions, Type 1 for state, Type 0 for date.
 
 ---
 
@@ -331,7 +331,7 @@ ml/                 feature/label/train/evaluate pipeline, artifacts, tests
 rag/                retrieval + cited-answer module
 scripts/            pipeline, dbt, sync, retention and startup entry points
 snowflake/          optional credential-gated warehouse DDL and load scripts
-docs/               architecture, data model, validation, operations, ADRs, ML docs
+docs/ml/            model write-ups rendered by the AI Engineering surface
 tests/              platform and surface tests
 ```
 
@@ -339,24 +339,20 @@ tests/              platform and surface tests
 
 ## Design decisions
 
-Architecture decision records live in `docs/adr/`:
-
-- **ADR 0001: Cloud Object Storage** — superseded by ADR 0009.
-- **ADR 0002: Warehouse Lifecycle** — Snowflake in the early phase, then DuckDB plus Parquet as
-  the sustainable long-term engine. DuckDB is the warehouse of record; Snowflake remains an
-  optional, credential-gated dbt target.
-- **ADR 0003: Kimball Star Schema** — explicit fact and dimension tables rather than one wide
+- **Warehouse lifecycle.** Snowflake in the early phase, then DuckDB plus Parquet as the
+  sustainable long-term engine. DuckDB is the warehouse of record; Snowflake remains an
+  optional, credential-gated dbt target (`snowflake/`, `dbt/profiles.yml`).
+- **Kimball star schema.** Explicit fact and dimension tables rather than one wide
   denormalized output.
-- **ADR 0004: SCD Strategy** — Type 2 for bank-like dimensions, Type 1 for state, Type 0 for date.
-- **ADR 0005: Airflow + Cosmos** — Airflow for orchestration. The Cosmos dbt integration was not
-  adopted; DAGs invoke the same Python entry points used locally through `BashOperator`.
-- **ADR 0006: Quality Split** — dbt tests for structural assertions, expectation suites and
-  runtime checks for source-to-serving validation.
-- **ADR 0008: Terraform Boundary** — superseded by ADR 0009.
-- **ADR 0009: VPS Local Storage (replaces S3 and Terraform)** — S3, boto3 and the Terraform
-  module were removed. Bronze is the VPS local filesystem under a Hive-partitioned layout with a
-  rotation policy; deployment is Caddy plus `docker-compose.prod.yml`, so there are no cloud
-  resources to provision.
+- **SCD strategy.** Type 2 for bank-like dimensions, Type 1 for state, Type 0 for date.
+- **Orchestration without an orchestrator-only code path.** Airflow schedules the pipeline,
+  but the Cosmos dbt integration was not adopted: DAGs invoke the same Python entry points
+  used locally through `BashOperator`.
+- **Quality split.** dbt tests for structural assertions; expectation suites and runtime
+  probes for source-to-serving validation.
+- **VPS local storage instead of S3 and Terraform.** Bronze is the VPS local filesystem under
+  a Hive-partitioned layout with a rotation policy, so there are no cloud resources to
+  provision. Deployment is Caddy plus `docker-compose.prod.yml`.
 
 ---
 
